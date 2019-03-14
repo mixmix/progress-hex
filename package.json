@@ -1,0 +1,26 @@
+{
+  "name": "progress-hex",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "tape test/*.js | tap-spec",
+    "build": "browserify test/view/index.js -p tinyify | indexhtmlify > test/view/index.html",
+    "watch": "watchify test/view/index.js -v -o '| indexhtmlify > test/view/index.html'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mixmix/progress-hex.git"
+  },
+  "devDependencies": {
+    "browserify": "^16.2.3",
+    "indexhtmlify": "^1.3.1",
+    "tap-spec": "^5.0.0",
+    "tape": "^4.10.1",
+    "tinyify": "^2.5.0",
+    "watchify": "^3.11.0"
+  },
+  "author": "mixmix",
+  "license": "AGPL-3.0",
+  "homepage": "https://github.com/mixmix/progress-hex#readme"
+}
