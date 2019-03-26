@@ -3,46 +3,40 @@ const hexGrid = require('../../lib/hex-grid')
 
 document.body.style.setProperty('margin', 0)
 
-var svg = h('svg', {
-  viewBox: '-300 -200 600 400',
-  height: '100vh'
-})
-svg.style.setProperty('width', '100%')
-svg.style.setProperty('max-height', '100vh')
+const r = 5
+var svg = Progress({ r, n: 0 })
 document.body.appendChild(svg)
 
-const r = 5
 // var n = 1
 var n = 150
 var progress = 75
 
-setInterval(
-  () => n++,
-  50
-)
+function render () {
+  const newSvg = Progress({ r, n })
+  document.body.replaceChild(newSvg, svg)
+  svg = newSvg
+}
+setInterval(render, 50)
+setInterval(() => n++, 50)
+setInterval(() => progress++, 90)
 
-setInterval(
-  () => progress++,
-  90
-)
+function Progress ({ r, n, progress = 0 }) {
+  if (progress > n) {
+    progress = n
+    console.error('progress-hex: look out, your progress should not be exeeding your n')
+  }
 
-setInterval(
-  () => {
-    const newSvg = h('svg',
-      {
-        viewBox: '-300 -200 600 400',
-        height: '100vh'
-      },
-      hexGrid({ r, n }).map((vec, i) => Circle({ vec, r, i, progress }))
-    )
-    newSvg.style.setProperty('width', '100%')
-    newSvg.style.setProperty('max-height', '100vh')
-
-    document.body.replaceChild(newSvg, svg)
-    svg = newSvg
-  },
-  50
-)
+  const svg = h('svg',
+    {
+      viewBox: '-300 -200 600 400',
+      height: '100vh'
+    },
+    hexGrid({ r, n }).map((vec, i) => Circle({ vec, r, i, progress }))
+  )
+  svg.style.setProperty('width', '100%')
+  svg.style.setProperty('max-height', '100vh')
+  return svg
+}
 
 function Circle ({ vec, r, i, progress }) {
   return h('circle', {
@@ -58,11 +52,4 @@ function Circle ({ vec, r, i, progress }) {
     // 'data-dist': vecDist(vec),
     // style: { opacity: i >= progress ? 0.2 : 1 }
   })
-}
-
-function vecDist (a, b = [0, 0]) {
-  return Math.sqrt(
-    (a[0] - b[0]) * (a[0] - b[0]) +
-    (a[1] - b[1]) * (a[1] - b[1])
-  )
 }
